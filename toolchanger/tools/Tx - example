@@ -1,0 +1,117 @@
+
+# This is an example tool template. exact values of course need to be adjusted.
+# Why 🟨? why ⬜️?
+# they serve as keys:
+# ⬜️ -> search and replace with toolnumber
+# 🟨 -> same, but exception for T0 (if t0, search and replace with nothing)
+
+
+#───< Toolchanger specific! ---------------------------------------------
+
+[gcode_macro T⬜️]
+variable_active: 0
+variable_color: ""
+variable_tool_number: ⬜️
+gcode:
+   SELECT_TOOL T={tool_number} {rawparams}
+
+[tool T⬜️]
+tool_number: ⬜️
+detection_pin: ^!et⬜️:PB6
+extruder: extruder🟨
+fan: T⬜️_partfan
+# parking position
+params_park_x:
+params_park_y:
+params_park_z:
+
+[tool_probe T⬜️]
+pin: ^et⬜️:PB6
+tool: ⬜️
+z_offset: -1.0 # negative
+speed: 5.0
+samples: 3
+samples_result: median
+sample_retract_dist: 2.0
+samples_tolerance: 0.02
+samples_tolerance_retries: 3
+activate_gcode:
+    _TAP_PROBE_ACTIVATE HEATER=extruder🟨 TEMP=150
+
+#==========================================================================
+# anything below this point is likely custom to your own config.
+#==========================================================================
+
+[mcu et⬜️]
+canbus_uuid: 9422cd1b01cb
+
+#───< Extruder ---------------------------------------------------------
+[tmc2209 extruder🟨]
+uart_pin: et⬜️: PA15
+run_current: 0.600
+stealthchop_threshold: 999999
+
+https://github.com/Contomo/klipper-toolchanger-hard/blob/main/examples/z%20probe/per%20tool%20probe/toolhead_n.cfg
+
+[extruder]
+step_pin: et⬜️: PD0
+dir_pin: et⬜️: PD1
+enable_pin: !et⬜️: PD2
+microsteps: 32
+full_steps_per_rotation: 200
+rotation_distance: 5.6
+max_extrude_only_distance: 1400.0
+max_extrude_only_velocity: 75.0
+max_extrude_only_accel: 1500
+nozzle_diameter: 0.400
+filament_diameter: 1.750
+heater_pin: et⬜️: PB13
+sensor_type: Generic 3950
+sensor_pin: et⬜️: PA3
+control: pid
+pid_Kp=30
+pid_Ki=19.795
+pid_Kd=20
+
+min_temp: 0
+max_temp: 300
+max_extrude_cross_section: 0.64
+
+#───< Fans ---------------------------------------------------------
+[fan_generic T⬜️_partfan]
+pin: et⬜️:PA1
+
+[heater_fan T⬜️_hotend_fan]
+pin: et⬜️:PA0
+heater: extruder🟨
+heater_temp: 65.0
+
+#───< accel --------------------------------------------------------
+[adxl345 T⬜️]
+cs_pin: et⬜️: PB12
+spi_software_sclk_pin: et⬜️: PB10
+spi_software_mosi_pin: et⬜️: PB11
+spi_software_miso_pin: et⬜️: PB2
+axes_map: x,y,z
+
+[tool T⬜️]
+params_accelerometer: 'adxl345 ⬜️0'
+
+#────\/────(optional)─────────< LEDs >────────────(optional)────\/────
+[neopixel T⬜️_leds]
+pin: et⬜️:PD3
+chain_count: 3
+color_order: GRB
+initial_RED: 0.0
+initial_GREEN: 0.0
+initial_BLUE: 0.0
+initial_WHITE: 0.0
+
+[gcode_macro _T⬜️_vars]
+variable_logo_led_name:         "T⬜️_leds"
+variable_logo_idx:              "1"
+variable_logo_brightness:       "1"
+variable_nozzle_led_name:       "T⬜️_leds"
+variable_nozzle_idx:            "2,3"
+variable_nozzle_brightness:     "1,1" # add it or leave it, defaults to 1.0 anyways.
+gcode:
